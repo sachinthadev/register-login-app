@@ -51,12 +51,15 @@ class AuthManager extends Controller
             'password' => 'required|min:5|max:12'
         ]);
 
-        $data['name'] = $request->input('name');
-        $data['email'] = $request->input('email');
-        $data['password'] = Hash::make($request->input('password'));
+         $data = new User();
 
-        $user = User::create($data);
-        if (!$user) {
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->password = Hash::make($request->password);
+
+        $data->save();
+
+        if (!$data) {
             return redirect()->route('register')->with('', 'Registration failed');
         } else {
             return redirect()->route('login')->with('success', 'Registration successful');
