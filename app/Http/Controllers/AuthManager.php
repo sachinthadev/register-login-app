@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\User;
 
 
+
  
 
 class AuthManager extends Controller
@@ -51,22 +52,20 @@ class AuthManager extends Controller
             'password' => 'required|min:5|max:12'
         ]);
 
-         $data = new User();
+        $user = new User();
 
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->password = Hash::make($request->password);
+        $user->name =$request->name;
+        $user->email =$request->email;
+        $user->password = Hash::make($request->password);
+        
 
-        $data->save();
+        $user->save();
+        return redirect('/login')->with('success', 'User registered successfully. Login now!');
 
-        if (!$data) {
-            return redirect()->route('register')->with('', 'Registration failed');
-        } else {
-            return redirect()->route('login')->with('success', 'Registration successful');
-        }
     }
+    
 
-    public function logout()
+    function logout()
     {
         Session::flush();
         Auth::logout();
