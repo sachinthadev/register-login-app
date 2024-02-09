@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\User;
+use App\Models\User;
+
+
 
 
 
@@ -52,16 +54,16 @@ class AuthManager extends Controller
             'password' => 'required|min:5|max:12'
         ]);
 
-        $user = new User();
+        $data['name'] = $request->input('name');
+        $data['email'] = $request->input('email');
+        $data['password'] = Hash::make($request->input('password'));
 
-        $user->name =$request->name;
-        $user->email =$request->email;
-        $user->password = Hash::make($request->password);
-        
-
-        $user->save();
-        return redirect('/login')->with('success', 'User registered successfully. Login now!');
-
+        $user = User::create($data);
+        if (!$user) {
+            return redirect()->route('register')->with('', 'Registration failed');
+        } else {
+            return redirect()->route('login')->with('success', 'Registration successful');
+        }
     }
     
 
