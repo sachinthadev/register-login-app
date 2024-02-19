@@ -74,3 +74,4 @@ class AuthManager extends Controller
         return redirect()->route('login');
     }
 }
+//totally finished
